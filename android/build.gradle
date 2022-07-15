@@ -1,5 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.6.10'
+    google_service_version = '4.3.13'
+    firebase_version = '30.2.0'
     repositories {
         google()
         mavenCentral()
@@ -8,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("com.google.gms:google-services:$google_service_version")
     }
 }
 
