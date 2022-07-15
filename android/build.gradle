@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.6.10'
-    google_service_version = '4.3.13'
-    firebase_version = '30.2.0'
+    ext.google_service_version = '4.3.13'
+    ext.firebase_version = '30.2.0'
     repositories {
         google()
         mavenCentral()
