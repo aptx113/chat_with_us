@@ -4,23 +4,30 @@ import 'package:flutter/material.dart';
 
 import 'screens/auth_screen.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final theme =
+      ThemeData(primarySwatch: Colors.pink, backgroundColor: Colors.pink);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FlutterChat',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: theme.copyWith(
+          colorScheme: theme.colorScheme.copyWith(secondary: Colors.deepPurple),
+          buttonTheme: ButtonTheme.of(context).copyWith(
+              buttonColor: Colors.pink,
+              textTheme: ButtonTextTheme.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ))),
       home: const AuthScreen(),
     );
   }
