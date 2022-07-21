@@ -29,14 +29,15 @@ class MessagesWidget extends StatelessWidget {
                 );
               }
               final chatDocs = (snapshot.data as QuerySnapshot<Object>).docs;
+              final user = futureSnapshot.data as User;
               return ListView.builder(
                 reverse: true,
                 itemCount: chatDocs.length,
                 itemBuilder: (BuildContext context, int index) =>
                     MessageBubleWidget(
+                  username: chatDocs[index]['username'],
                   message: chatDocs[index]['text'],
-                  isMe: chatDocs[index]['userId'] ==
-                      (futureSnapshot.data as User).uid,
+                  isMe: chatDocs[index]['userId'] == user.uid,
                   key: ValueKey(chatDocs[index].id),
                 ),
               );
