@@ -24,6 +24,8 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       'createdAt': Timestamp.now(),
       'userId': user?.uid,
       'username': userData['username'],
+      'userImage': userData['image_url'] ??
+          'https://ichef.bbci.co.uk/news/800/cpsprodpb/B2B7/production/_124915754_catspuds.jpg'
     });
     _controller.clear();
   }
