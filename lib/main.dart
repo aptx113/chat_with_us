@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _initialization = Firebase.initializeApp();
+    final initialization = Firebase.initializeApp();
     return FutureBuilder(
-        future: _initialization,
+        future: initialization,
         builder: (context, snapshot) {
           return MaterialApp(
             title: 'FlutterChat',

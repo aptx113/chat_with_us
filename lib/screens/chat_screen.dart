@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../utils/logger.dart';
 import '../widgets/chat/messages_widget.dart';
@@ -14,6 +15,26 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  static const platform = MethodChannel('samples.flutter.dev/battery');
+
+  String _batteryLevel = 'Unknown battery level.';
+
+  Future<void> _getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      final int result = await platform.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Battery level at $result % .';
+      setState(() {
+        _batteryLevel = batteryLevel;
+      });
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+      setState(() {
+        _batteryLevel = batteryLevel;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,10 +80,33 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
+              DropdownMenuItem(
+                value: 'battery',
+                onTap: _getBatteryLevel,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.battery_0_bar,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text('Battery'),
+                  ],
+                ),
+              )
             ],
             onChanged: (String? itemIdentifier) {
               if (itemIdentifier == 'logout') {
                 auth.signOut();
+              }
+              if (itemIdentifier == 'battery') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Battery Level: $_batteryLevel'),
+                  ),
+                );
               }
             },
           )
@@ -73,7 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: MessagesWidget(),
           ),
-          NewMessageWidget()
+          NewMessageWidget(),
         ],
       ),
     );
