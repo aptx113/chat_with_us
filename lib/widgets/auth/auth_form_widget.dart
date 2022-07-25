@@ -69,6 +69,9 @@ class _AuthFormWidgetState extends State<AuthFormWidget> {
                   ),
                 TextFormField(
                   key: const ValueKey('userEmail'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
                   validator: (value) {
                     return (value != null && value.isEmpty ||
                             value != null && !value.contains('@'))
@@ -84,6 +87,9 @@ class _AuthFormWidgetState extends State<AuthFormWidget> {
                 if (!_isLogin)
                   TextFormField(
                     key: const ValueKey('userName'),
+                    autocorrect: true,
+                    textCapitalization: TextCapitalization.words,
+                    enableSuggestions: false,
                     validator: (value) => (value != null && value.isEmpty ||
                             value != null && value.length < 4)
                         ? 'Please enter at least 4 characters'

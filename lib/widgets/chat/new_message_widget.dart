@@ -23,7 +23,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       'text': _enteredMessage,
       'createdAt': Timestamp.now(),
       'userId': user?.uid,
-      'username': userData['username'],
+      'username': userData.data()!['username'],
       'userImage': userData['image_url'] ??
           'https://ichef.bbci.co.uk/news/800/cpsprodpb/B2B7/production/_124915754_catspuds.jpg'
     });
@@ -39,6 +39,9 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         children: [
           Expanded(
             child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              autocorrect: true,
+              enableSuggestions: true,
               decoration: const InputDecoration(labelText: 'Send a message...'),
               onChanged: (value) {
                 setState(() {

@@ -1,10 +1,11 @@
 import 'package:chat_with_us/firebase_options.dart';
-import 'package:chat_with_us/screens/chat_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/auth_screen.dart';
+import 'screens/chat_screen.dart';
+import 'screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,25 +21,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FlutterChat',
-      theme: theme.copyWith(
-          colorScheme: theme.colorScheme.copyWith(secondary: Colors.deepPurple),
-          buttonTheme: ButtonTheme.of(context).copyWith(
-              buttonColor: Colors.pink,
-              textTheme: ButtonTextTheme.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ))),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
+    final _initialization = Firebase.initializeApp();
+    return FutureBuilder(
+        future: _initialization,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const ChatScreen();
-          }
-          return const AuthScreen();
-        },
-      ),
-    );
+          return MaterialApp(
+            title: 'FlutterChat',
+            theme: theme.copyWith(
+                colorScheme:
+                    theme.colorScheme.copyWith(secondary: Colors.deepPurple),
+                buttonTheme: ButtonTheme.of(context).copyWith(
+                    buttonColor: Colors.pink,
+                    textTheme: ButtonTextTheme.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ))),
+            home: snapshot.connectionState != ConnectionState.done
+                ? const SplashScreen()
+                : StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      if (snapshot.hasData) {
+                        return const ChatScreen();
+                      }
+                      return const AuthScreen();
+                    },
+                  ),
+          );
+        });
   }
 }
